@@ -3,7 +3,7 @@
 
 
 
-var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
 // Setting up the Canvas.
@@ -44,7 +44,7 @@ function createWall(event) {
     horizontalWalls.push({
       x: mouseX,
       y: mouseY
-    })
+    });
     //shrink the GameArea height
     gameArea.height = mouseY;
   }
@@ -52,10 +52,10 @@ function createWall(event) {
     verticalWalls.push({
       x: mouseX,
       y: mouseY
-    })
+    });
     //shrink the GameArea width
     gameArea.width = mouseX;
-  };
+  }
 }
 
 
@@ -107,7 +107,7 @@ function drawVerticalWall(wall) {
 function draw() {
 
     // Making sure the canvas is cleared between each drawcall.
-    c.clearRect(0, 0, canvas.width, canvas.height);
+    c.clearRect(0, 0, gameArea.width, gameArea.height);
 
     // For each of the walls in the walls Array, draw a wall.
     verticalWalls.forEach(drawVerticalWall);
