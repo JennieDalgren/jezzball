@@ -1,8 +1,4 @@
 
-
-
-
-
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
@@ -17,7 +13,7 @@ var balls = [  {x:50,y:30,r:10,color:125,vx:3,vy:3},  ];
 
 // Setting up the Walls.
 var wallThickness = 3;
-var cursorCorrection = 10;
+var cursorCorrection = 10; //because of margin
 var verticalWalls = [];
 var horizontalWalls = [];
 
@@ -34,27 +30,55 @@ function toggleDirection(e) {
   }
 }
 
+// Make the correct mouse position from the canvas.
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+        y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+    };
+}
+
 
 // Creates a Wall on an Event and pushed it to the Walls Array.
+//cursorCorrection because of margin.
 function createWall(event) {
   var mouseX = event.pageX-cursorCorrection;
   var mouseY = event.pageY-cursorCorrection;
 
   if (dir === 1) {
+    // horizontalWalls = []; // Clears the Array before making new walls.
     horizontalWalls.push({
       x: mouseX,
       y: mouseY
     });
     //shrink the GameArea height
-    gameArea.height = mouseY;
+    if (balls[0].y < mouseY){
+      gameArea.height = mouseY;
+      console.log("ball is above ", gameArea);
+    } else {
+      gameArea.y = mouseY;
+      // gameArea.height = gameArea.height - mouseY - wallThickness;
+      console.log("ball is below ", gameArea);
+    }
+    return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
   }
   else {
+    // verticalWalls = [];   // Clears the Array before making new walls.
     verticalWalls.push({
       x: mouseX,
       y: mouseY
     });
     //shrink the GameArea width
-    gameArea.width = mouseX;
+    if (balls[0].x < mouseX){
+      gameArea.width = mouseX;
+      console.log("ball is to left ", gameArea);
+    } else {
+      gameArea.x = mouseX;
+      // gameArea.width = gameArea.width - mouseX - wallThickness;
+      console.log("ball is to right ", gameArea);
+    }
+    return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
   }
 }
 
@@ -107,7 +131,7 @@ function drawVerticalWall(wall) {
 function draw() {
 
     // Making sure the canvas is cleared between each drawcall.
-    c.clearRect(0, 0, gameArea.width, gameArea.height);
+    c.clearRect(0, 0, canvas.width, canvas.height);
 
     // For each of the walls in the walls Array, draw a wall.
     verticalWalls.forEach(drawVerticalWall);
@@ -118,13 +142,13 @@ function draw() {
 
     // Collision detection for the ball and the Canvas or GameArea.
     if(balls[0].x + balls[0].vx > gameArea.width - balls[0].r ||
-       balls[0].x + balls[0].vx < balls[0].r)
+       balls[0].x + balls[0].vx < gameArea.x + balls[0].r)
     {
         balls[0].vx = - balls[0].vx;
     }
 
     if(balls[0].y + balls[0].vy > gameArea.height - balls[0].r  ||
-       balls[0].y + balls[0].vy < balls[0].r)
+       balls[0].y + balls[0].vy < gameArea.y + balls[0].r)
     {
         balls[0].vy = - balls[0].vy;
     }

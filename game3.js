@@ -4,6 +4,8 @@
 // ================== //
 function Canvas () {
   this.level = 1;
+  this.x = 0;
+  this.y = 0;
   this.w = 600;
   this.h = 400;
   this.balls = [];
@@ -28,11 +30,16 @@ Canvas.prototype.generateBalls = function () {
 };
 
 Canvas.prototype.drawBalls = function () {
+  this.canvasContext.clearRect(this.x, this.y, this.w, this.h); //NOT WORkING!!!
+
   this.canvasContext.beginPath();
   this.canvasContext.arc(this.balls[0].position.x,this.balls[0].position.y, this.balls[0].radius, 0, Math.PI*2);
   this.canvasContext.fillStyle = '#000';
   this.canvasContext.fill();
   this.canvasContext.closePath();
+
+
+
 };
 
 Canvas.prototype.update = function () {
@@ -65,6 +72,7 @@ Ball.prototype.move = function () {
   console.log('this.position.y', this.position.y);
 };
 
+// To make the ball bounce off the walls
 Ball.prototype.bounce = function () {
   if (this.position.x  > canvas.w - this.radius || this.position.x  < this.radius) {
     this.speed.x = - this.speed.x;
@@ -77,11 +85,24 @@ Ball.prototype.bounce = function () {
   this.move();
 };
 
+
 Ball.prototype.update = function () {
   this.intervalId = setInterval(this.bounce.bind(this), 10);
 };
 
 
+// WALL  CONSTRUCTOR //
+// ================== //
+function Wall () {
+  this.position = {
+    x: 0,
+    y: 0
+  };
+  this.size = {
+    w: 10,
+    h: 10
+  };
+}
 
 
 
