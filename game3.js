@@ -101,14 +101,21 @@ Canvas.prototype.checkBallsPosition = function(mouse) {
 };
 
 
-Canvas.prototype.generateWalls = function () {
-  console.log(this.wallDirection);
+Canvas.prototype.generateWalls = function (e) {
+
+  console.log('e.pageX', e.pageX);
+  console.log('e.pageY', e.pageY);
+  var mouse = {
+    x: e.pageX,
+    y: e.pageY
+  };
+
   if(this.wallDirection == 1) {
     console.log('horizontal wall is coming');
-    this.walls.horizontal.push(new Wall());
+    this.walls.horizontal.push(new Wall(mouse));
   } else {
     console.log('vertical wall is coming');
-    this.walls.vertical.push(new Wall());
+    this.walls.vertical.push(new Wall(mouse));
   }
 
   console.log('this.walls', this.walls);
@@ -166,10 +173,10 @@ Ball.prototype.update = function () {
 
 // WALL  CONSTRUCTOR //
 // ================== //
-function Wall (axis) {
+function Wall (mouse) {
   this.position = {
-    x: 0,
-    y: 0
+    x: mouse.x,
+    y: mouse.y
   };
   this.size = {
     w: 10,
