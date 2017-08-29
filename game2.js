@@ -2,11 +2,14 @@
 var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
+
 // Setting up the Canvas.
 var WIDTH = 600;
 var HEIGHT = 400;
+canvas.style.border = "none";
 
 // Setting the GameArea, Direction and Balls.
+var level = 1;
 var dir = 1;
 var gameArea = {x:0,y:0,width:WIDTH,height:HEIGHT};
 var balls = [  {x:50,y:30,r:10,color:125,vx:3,vy:3},  ];
@@ -37,12 +40,21 @@ function clearedArea () {
   console.log(startingArea);
   console.log(currentGameArea);
 
-  var cleared = Math.floor(100 -(currentGameArea/startingArea*100));
+  cleared = Math.floor(100 -(currentGameArea/startingArea*100));
   console.log("You've cleared " + cleared + " % of the field.");
+  return cleared;
 
 }
 
-
+function changeLevel () {
+  if (cleared > 80) {
+    level++;
+    balls.push({x:50,y:30,r:10,color:25,vx:1,vy:1}); //This should be newBall
+    console.log("Level up! Now it's level " + level);
+    console.log(balls);
+    //reset game area?
+  }
+}
 
 
 // Make the correct mouse position from the canvas.
@@ -95,7 +107,8 @@ function createWall(event) {
     }
 
   }
-  clearedArea ();
+  clearedArea();
+  changeLevel();
   return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
 }
 
