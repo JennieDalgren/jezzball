@@ -62,6 +62,11 @@ Canvas.prototype.update = function () {
   this.intervalId = setInterval(this.drawBalls.bind(this), 10);
 };
 
+//ADDED NOT WORKING
+Canvas.prototype.updateWalls = function () {
+  this.walls.vertical.forEach(drawVerticalWall);
+  this.walls.horizontal.forEach(drawHorizontalWall);
+};
 
 Canvas.prototype.checkBallsPosition = function(mouse) {
   var shrinkHeight = true;
@@ -100,6 +105,39 @@ Canvas.prototype.checkBallsPosition = function(mouse) {
   }
 };
 
+//ADDED NOT WORKING
+Canvas.prototype.drawHorizontalWall = function (wall) {
+  //draws first half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, this.w, 10);
+  c.fillStyle = "red";
+  c.fill();
+  c.closePath();
+
+  //draws second half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, -this.w, 10);
+  c.fillStyle = "green";
+  c.fill();
+  c.closePath();
+};
+
+//ADDED NOT WORKING
+Canvas.prototype.drawVerticalWall = function (wall) {
+  //draws first half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, 10, this.h);
+  c.fillStyle = "red";
+  c.fill();
+  c.closePath();
+
+  //draws second half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, 10, -this.h);
+  c.fillStyle = "green ";
+  c.fill();
+  c.closePath();
+};
 
 Canvas.prototype.generateWalls = function (e) {
 
@@ -127,6 +165,7 @@ Canvas.prototype.toggleDirection = function (e){
     this.canvasElement.toggleClass('direction');
     this.wallDirection = this.wallDirection * -1;
   }
+
 };
 
 
@@ -182,6 +221,7 @@ function Wall (mouse) {
     w: 10,
     h: 10
   };
+  this.thickness = 10;
 }
 
 

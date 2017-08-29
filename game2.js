@@ -3,12 +3,12 @@ var canvas = document.getElementById("canvas");
 var c = canvas.getContext("2d");
 
 // Setting up the Canvas.
-var w = 600;
-var h = 400;
+var WIDTH = 600;
+var HEIGHT = 400;
 
 // Setting the GameArea, Direction and Balls.
 var dir = 1;
-var gameArea = {x:0,y:0,width:w,height:h};
+var gameArea = {x:0,y:0,width:WIDTH,height:HEIGHT};
 var balls = [  {x:50,y:30,r:10,color:125,vx:3,vy:3},  ];
 
 // Setting up the Walls.
@@ -30,14 +30,29 @@ function toggleDirection(e) {
   }
 }
 
-// Make the correct mouse position from the canvas.
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-        y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-    };
+function clearedArea () {
+
+  var startingArea = WIDTH*HEIGHT; //400 * 600 original w and h
+  var currentGameArea = (gameArea.width - gameArea.x) * (gameArea.height - gameArea.y);
+  console.log(startingArea);
+  console.log(currentGameArea);
+
+  var cleared = Math.floor(100 -(currentGameArea/startingArea*100));
+  console.log("You've cleared " + cleared + " % of the field.");
+
 }
+
+
+
+
+// Make the correct mouse position from the canvas.
+// function getMousePos(canvas, evt) {
+//     var rect = canvas.getBoundingClientRect();
+//     return {
+//         x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+//         y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+//     };
+// }
 
 
 // Creates a Wall on an Event and pushed it to the Walls Array.
@@ -61,7 +76,7 @@ function createWall(event) {
       // gameArea.height = gameArea.height - mouseY - wallThickness;
       console.log("ball is below ", gameArea);
     }
-    return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
+
   }
   else {
     // verticalWalls = [];   // Clears the Array before making new walls.
@@ -78,8 +93,10 @@ function createWall(event) {
       // gameArea.width = gameArea.width - mouseX - wallThickness;
       console.log("ball is to right ", gameArea);
     }
-    return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
+
   }
+  clearedArea ();
+  return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
 }
 
 
@@ -96,14 +113,14 @@ function drawBall() {
 function drawHorizontalWall(wall) {
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, w, wallThickness);
+  c.rect(wall.x, wall.y, canvas.width, wallThickness);
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, -w, wallThickness);
+  c.rect(wall.x, wall.y, -canvas.width, wallThickness);
   c.fillStyle = "green";
   c.fill();
   c.closePath();
@@ -113,18 +130,20 @@ function drawHorizontalWall(wall) {
 function drawVerticalWall(wall) {
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, h);
+  c.rect(wall.x, wall.y, wallThickness, canvas.height);
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, -h);
+  c.rect(wall.x, wall.y, wallThickness, -canvas.height);
   c.fillStyle = "green ";
   c.fill();
   c.closePath();
+
 }
+
 
 
 // Main Draw Cycle, this will draw the came at Runtime.
