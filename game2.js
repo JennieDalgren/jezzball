@@ -2,24 +2,25 @@
 var canvas = document.getElementById("myCanvas");
 var c = canvas.getContext("2d");
 
-
-var dir = 1;
+// Setting up the Canvas.
 var w = 600;
 var h = 400;
 
+// Setting the GameArea, Direction and Balls.
 var dir = 1;
 var gameArea = {x:0,y:0,width:w,height:h};
 var balls = [  {x:50,y:30,r:10,color:125,vx:3,vy:3},  ];
-var walls = [];
 
-var posX;
-var posY;
+// Setting up the Walls.
+var wallThickness = 3;
+var cursorCorrection = 10;
+var verticalWalls = [];
+var horizontalWalls = [];
 
-var wallThickness = 10;
 
-$(".jscv").on('mouseup', drawHorizontalWall);
+// Event listners, and Key Toggles.
+$(".jscv").on('mouseup', createWall);
 $(document).on('keyup', toggleDirection);
-
 
 function toggleDirection(e) {
   if(e.keyCode==32){
@@ -30,76 +31,97 @@ function toggleDirection(e) {
 }
 
 
+// Creates a Wall on an Event and pushed it to the Walls Array.
+function createWall(event) {
+  var mouseX = event.pageX-cursorCorrection;
+  var mouseY = event.pageY-cursorCorrection;
+
+  if (dir === 1) {
+    horizontalWalls.push({
+      x: mouseX,
+      y: mouseY
+    })
+    //shrink the GameArea height
+    gameArea.height = mouseY;
+  }
+  else {
+    verticalWalls.push({
+      x: mouseX,
+      y: mouseY
+    })
+    //shrink the GameArea width
+    gameArea.width = mouseX;
+  };
+}
+
+
+// Draw a Ball, this will create a Ball.
 function drawBall() {
     c.beginPath();
     c.arc(balls[0].x, balls[0].y, balls[0].r, 0, Math.PI*2);
-    c.fillStyle = "#0095DD";
-    c.fill();
-    c.closePath();
-}
-
-function drawHorizontalWall(event) {
-
-  if (dir === 1) {
-    c.beginPath();
-    c.rect(event.pageX, event.pageY, w, wallThickness);
     c.fillStyle = "#000000";
     c.fill();
     c.closePath();
+}
 
-    c.beginPath();
-    c.rect(event.pageX, event.pageY, -w, wallThickness);
-    c.fillStyle = "#999999";
-    c.fill();
-    c.closePath();
-    posX = event.pageX;
-    posY = event.pageY;
-    console.log("this is pos x ", posX);
-    return posX;
-  }
-  else {drawVerticalWall(event);}
+// Draw a Horizontal Wall.
+function drawHorizontalWall(wall) {
+  //draws first half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, w, wallThickness);
+  c.fillStyle = "red";
+  c.fill();
+  c.closePath();
+
+  //draws second half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, -w, wallThickness);
+  c.fillStyle = "green";
+  c.fill();
+  c.closePath();
+}
+
+// Draw a Vertical Wall.
+function drawVerticalWall(wall) {
+  //draws first half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, wallThickness, h);
+  c.fillStyle = "red";
+  c.fill();
+  c.closePath();
+
+  //draws second half of the wall
+  c.beginPath();
+  c.rect(wall.x, wall.y, wallThickness, -h);
+  c.fillStyle = "green ";
+  c.fill();
+  c.closePath();
 }
 
 
-function drawVerticalWall(event) {
-  console.log("im in draw wall");
-    c.beginPath();
-    c.rect(event.pageX, event.pageY, wallThickness, h);
-    c.fillStyle = "#000000";
-    c.fill();
-    c.closePath();
-
-    c.beginPath();
-    c.rect(event.pageX, event.pageY, wallThickness, -h);
-    c.fillStyle = "#999999";
-    c.fill();
-    c.closePath();
-    posX = event.pageX;
-    posY = event.pageY;
-    console.log("this is pos x ", posX);
-    return posX;
-
-}
-
-
-
-
+// Main Draw Cycle, this will draw the came at Runtime.
 function draw() {
-    c.clearRect(0, 0, 300, 300);
 
+    // Making sure the canvas is cleared between each drawcall.
+    c.clearRect(0, 0, canvas.width, canvas.height);
+
+    // For each of the walls in the walls Array, draw a wall.
+    verticalWalls.forEach(drawVerticalWall);
+    horizontalWalls.forEach(drawHorizontalWall);
+
+    // Drawing the ball
     drawBall();
 
-    drawVerticalWall(event) ;
-    drawHorizontalWall(event) ;
-
-
-
-
-
-    if(balls[0].x + balls[0].vx > w - balls[0].r || balls[0].x + balls[0].vx < balls[0].r) {
+    // Collision detection for the ball and the Canvas or GameArea.
+    if(balls[0].x + balls[0].vx > gameArea.width - balls[0].r ||
+       balls[0].x + balls[0].vx < balls[0].r)
+    {
         balls[0].vx = - balls[0].vx;
     }
-    if(balls[0].y + balls[0].vy > h - balls[0].r  || balls[0].y + balls[0].vy < balls[0].r) {
+
+    if(balls[0].y + balls[0].vy > gameArea.height - balls[0].r  ||
+       balls[0].y + balls[0].vy < balls[0].r)
+    {
         balls[0].vy = - balls[0].vy;
     }
 
@@ -107,23 +129,7 @@ function draw() {
     balls[0].x += balls[0].vx;
     balls[0].y += balls[0].vy;
 
-
-    // verticalWall.draw();
-    // drawVerticalWall();
-    // drawHorizontalWall();
-
     requestAnimationFrame(draw);
 }
 
 draw();
-
-
-
-// window.onload = function() {
-//   init();
-//
-// };
-
-
-//Use this to reload the game.
-// document.location.reload();
