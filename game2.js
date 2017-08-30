@@ -129,22 +129,29 @@ function drawBall() {
 
 // Draw a Horizontal Wall.
 function drawHorizontalWall(wall) {
-  function grow(){
+  function growRight(){
     var g = 0;
    for (var i = 0; i<gameArea.width; i++){
     g++;
   }}
 
+  function growLeft(){
+    var g = 0;
+   for (var i = 0; i<gameArea.x; i++){
+    g++;
+  }}
+
+
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, setInterval(grow, 20), wallThickness);
+  c.rect(wall.x, wall.y, setInterval(growRight, 20), wallThickness);
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, -setInterval(grow, 20), wallThickness);
+  c.rect(wall.x, wall.y, -setInterval(growLeft, 20), wallThickness);
   c.fillStyle = "green";
   c.fill();
   c.closePath();
@@ -154,14 +161,19 @@ function drawHorizontalWall(wall) {
 
 // Draw a Vertical Wall.
 function drawVerticalWall(wall) {
-  function grow(){
+  function growDown(){
     var g = 0;
-   for (var i = 0; i<canvas.height; i++){
+   for (var i = 0; i<gameArea.height; i++){
+    g++;
+  }}
+  function growUp(){
+    var g = 0;
+   for (var i = 0; i<gameArea.y; i++){
     g++;
   }}
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, setInterval(grow, 20));
+  c.rect(wall.x, wall.y, 10, setInterval(growUp, 20));
   c.fillStyle = "red";
   c.fill();
   c.closePath();
@@ -169,7 +181,7 @@ function drawVerticalWall(wall) {
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, -setInterval(grow, 20));
+  c.rect(wall.x, wall.y, wallThickness, -setInterval(growDown, 20));
   c.fillStyle = "green ";
   c.fill();
   c.closePath();
