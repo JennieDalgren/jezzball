@@ -123,19 +123,22 @@ function drawBall() {
 
 // Draw a Horizontal Wall.
 function drawHorizontalWall(wall) {
-  if (balls[0].y < wall.y){
-    wallThickness += 100;
-  }
+  function grow(){
+    var g = 0;
+   for (var i = 0; i<canvas.width; i++){
+    g += 1;
+  }}
+
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, canvas.width, wallThickness);
+  c.rect(wall.x, wall.y, setInterval(grow, 10), wallThickness);
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, -canvas.width, wallThickness);
+  c.rect(wall.x, wall.y, -setInterval(grow, 10), wallThickness);
   c.fillStyle = "green";
   c.fill();
   c.closePath();

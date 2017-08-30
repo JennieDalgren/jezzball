@@ -64,6 +64,7 @@ Canvas.prototype.update = function () {
 Canvas.prototype.refreshCanvas = function () {
   this.drawBalls();
   this.updateWalls();
+  this.checkBallsPosition();
 };
 
 //ADDED NOT WORKING
@@ -105,13 +106,14 @@ Canvas.prototype.checkBallsPosition = function(mouse) {
         shrinkWidth = false;
       }
     }
-    if(shrinkHeight) {
+    if(shrinkWidth) {
       this.w = mouse.x;
     } else {
       this.x = mouse.x;
     }
   }
 };
+
 
 
 Canvas.prototype.drawWalls = function (type, wall) {
