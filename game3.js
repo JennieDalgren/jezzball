@@ -8,6 +8,8 @@ function Canvas () {
   this.y = 0;
   this.w = 600;
   this.h = 400;
+  this.WIDTH = 600;
+  this.HEIGHT = 400;
   this.wallDirection = 1;
   this.balls = [];
   this.walls = {
@@ -45,14 +47,16 @@ Canvas.prototype.generateBalls = function () {
 Canvas.prototype.drawBalls = function () {
   //Clear old ball position
   this.canvasContext.clearRect(this.x, this.y, this.w, this.h);
-  this.canvasContext.beginPath();
+
 
   for (var i = 0; i < this.balls.length; i++){
+    this.canvasContext.beginPath();
     this.canvasContext.arc(this.balls[i].position.x,this.balls[i].position.y, this.balls[i].radius, 0, Math.PI*2);
+    this.canvasContext.fillStyle = '#000';
+    this.canvasContext.fill();
+    this.canvasContext.closePath();
   }
-  this.canvasContext.fillStyle = '#000';
-  this.canvasContext.fill();
-  this.canvasContext.closePath();
+
 };
 
 
@@ -64,7 +68,6 @@ Canvas.prototype.update = function () {
 Canvas.prototype.refreshCanvas = function () {
   this.drawBalls();
   this.updateWalls();
-  this.checkBallsPosition();
 };
 
 //ADDED NOT WORKING
@@ -77,7 +80,7 @@ Canvas.prototype.updateWalls = function () {
   }.bind(this));
 };
 
-Canvas.prototype.checkBallsPosition = function(mouse) {
+Canvas.prototype.checkBallsPosition = function() {
   var shrinkHeight = true;
   var shrinkWidth  = true;
 
@@ -117,13 +120,21 @@ Canvas.prototype.checkBallsPosition = function(mouse) {
 
 
 Canvas.prototype.drawWalls = function (type, wall) {
+  var intervalId = setInterval(grow, 20);
+
+  function grow(){
+    var g=0;
+    while(g<this.w) {g++;}
+    clearInterval(intervalId);
+  }
+
   //draws first half of the wall
   this.canvasContext.beginPath();
 
   if(type === 'horizontal') {
-    this.canvasContext.rect(wall.position.x, wall.position.y, this.w, wall.size.h);
+    this.canvasContext.rect(wall.position.x, wall.position.y, intervalId, wall.size.h);
   } else {
-    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, this.h);
+    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w,intervalId);
   }
 
   this.canvasContext.fillStyle = "red";
@@ -133,9 +144,9 @@ Canvas.prototype.drawWalls = function (type, wall) {
   //draws second half of the wall
   this.canvasContext.beginPath();
   if(type === 'horizontal') {
-    this.canvasContext.rect(wall.position.x, wall.position.y, -this.w, wall.size.h);
+    this.canvasContext.rect(wall.position.x, wall.position.y, -intervalId, wall.size.h);
   } else {
-    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, -this.h);
+    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, -intervalId);
   }
   this.canvasContext.fillStyle = "green";
   this.canvasContext.fill();
@@ -143,10 +154,9 @@ Canvas.prototype.drawWalls = function (type, wall) {
 };
 
 
+
 Canvas.prototype.generateWalls = function (e) {
 
-  console.log('e.pageX', e.pageX);
-  console.log('e.pageY', e.pageY);
   var mouse = {
     x: e.pageX,
     y: e.pageY
@@ -161,6 +171,8 @@ Canvas.prototype.generateWalls = function (e) {
   }
 
   console.log('this.walls', this.walls);
+  this.clearedArea();
+  this.changeLevel();
 };
 
 Canvas.prototype.toggleDirection = function (e){
@@ -170,6 +182,28 @@ Canvas.prototype.toggleDirection = function (e){
     this.wallDirection = this.wallDirection * -1;
   }
 
+};
+
+Canvas.prototype.clearedArea = function () {
+
+  var startingArea = this.WIDTH * this.HEIGHT;
+  var currentGameArea = (this.w - this.x) * (this.h - this.y);
+  console.log(startingArea);
+  console.log(currentGameArea);
+
+  cleared = Math.floor(100 -(currentGameArea/startingArea*100));
+  console.log("You've cleared " + cleared + " % of the field.");
+  return cleared;
+};
+
+Canvas.prototype.changeLevel = function() {
+  if (cleared > 80) {
+    this.level++;
+    this.balls.push(new Ball()); //this will happen in generateBalls. restart everything with new level?
+    console.log("Level up! Now it's level " + this.level);
+    console.log(this.balls);
+
+  }
 };
 
 

@@ -56,7 +56,7 @@ function changeLevel () {
   }
 }
 
-
+//TODO ---- Put this in the other code!!!
 // Make the correct mouse position from the canvas, regardless of padding, margin.
 function getMousePos(canvas, event) {
     var rect = canvas.getBoundingClientRect();
@@ -126,19 +126,19 @@ function drawHorizontalWall(wall) {
   function grow(){
     var g = 0;
    for (var i = 0; i<canvas.width; i++){
-    g += 1;
+    g++;
   }}
 
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, setInterval(grow, 10), wallThickness);
+  c.rect(wall.x, wall.y, setInterval(grow, 20), wallThickness);
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, -setInterval(grow, 10), wallThickness);
+  c.rect(wall.x, wall.y, -setInterval(grow, 20), wallThickness);
   c.fillStyle = "green";
   c.fill();
   c.closePath();
@@ -148,16 +148,21 @@ function drawHorizontalWall(wall) {
 
 // Draw a Vertical Wall.
 function drawVerticalWall(wall) {
+  function grow(){
+    var g = 0;
+   for (var i = 0; i<canvas.height; i++){
+    g++;
+  }}
   //draws first half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, canvas.height);
+  c.rect(wall.x, wall.y, wallThickness, setInterval(grow, 20));
   c.fillStyle = "red";
   c.fill();
   c.closePath();
 
   //draws second half of the wall
   c.beginPath();
-  c.rect(wall.x, wall.y, wallThickness, -canvas.height);
+  c.rect(wall.x, wall.y, wallThickness, -setInterval(grow, 20));
   c.fillStyle = "green ";
   c.fill();
   c.closePath();
