@@ -25,9 +25,7 @@ function Canvas () {
 
   this.detectClickEvent();
   this.generateBalls(); // Run once
-  this.drawBalls();
   this.update();
-
 }
 
 Canvas.prototype.detectClickEvent = function () {
@@ -59,13 +57,23 @@ Canvas.prototype.drawBalls = function () {
 
 
 Canvas.prototype.update = function () {
-  this.intervalId = setInterval(this.drawBalls.bind(this), 10);
+  this.intervalId = setInterval(this.refreshCanvas.bind(this), 10);
+};
+
+
+Canvas.prototype.refreshCanvas = function () {
+  this.drawBalls();
+  this.updateWalls();
 };
 
 //ADDED NOT WORKING
 Canvas.prototype.updateWalls = function () {
-  this.walls.vertical.forEach(drawVerticalWall);
-  this.walls.horizontal.forEach(drawHorizontalWall);
+  this.walls.vertical.forEach(function(wall){
+    this.drawWalls('vertical', wall);
+  }.bind(this));
+  this.walls.horizontal.forEach(function(wall){
+    this.drawWalls('horizontal', wall);
+  }.bind(this));
 };
 
 Canvas.prototype.checkBallsPosition = function(mouse) {
@@ -105,39 +113,33 @@ Canvas.prototype.checkBallsPosition = function(mouse) {
   }
 };
 
-//ADDED NOT WORKING
-Canvas.prototype.drawHorizontalWall = function (wall) {
+
+Canvas.prototype.drawWalls = function (type, wall) {
   //draws first half of the wall
-  c.beginPath();
-  c.rect(wall.x, wall.y, this.w, 10);
-  c.fillStyle = "red";
-  c.fill();
-  c.closePath();
+  this.canvasContext.beginPath();
+
+  if(type === 'horizontal') {
+    this.canvasContext.rect(wall.position.x, wall.position.y, this.w, wall.size.h);
+  } else {
+    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, this.h);
+  }
+
+  this.canvasContext.fillStyle = "red";
+  this.canvasContext.fill();
+  this.canvasContext.closePath();
 
   //draws second half of the wall
-  c.beginPath();
-  c.rect(wall.x, wall.y, -this.w, 10);
-  c.fillStyle = "green";
-  c.fill();
-  c.closePath();
+  this.canvasContext.beginPath();
+  if(type === 'horizontal') {
+    this.canvasContext.rect(wall.position.x, wall.position.y, -this.w, wall.size.h);
+  } else {
+    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, -this.h);
+  }
+  this.canvasContext.fillStyle = "green";
+  this.canvasContext.fill();
+  this.canvasContext.closePath();
 };
 
-//ADDED NOT WORKING
-Canvas.prototype.drawVerticalWall = function (wall) {
-  //draws first half of the wall
-  c.beginPath();
-  c.rect(wall.x, wall.y, 10, this.h);
-  c.fillStyle = "red";
-  c.fill();
-  c.closePath();
-
-  //draws second half of the wall
-  c.beginPath();
-  c.rect(wall.x, wall.y, 10, -this.h);
-  c.fillStyle = "green ";
-  c.fill();
-  c.closePath();
-};
 
 Canvas.prototype.generateWalls = function (e) {
 
@@ -221,7 +223,8 @@ function Wall (mouse) {
     w: 10,
     h: 10
   };
-  this.thickness = 10;
+
+  this.isGrowing = true;
 }
 
 

@@ -57,35 +57,34 @@ function changeLevel () {
 }
 
 
-// Make the correct mouse position from the canvas.
-// function getMousePos(canvas, evt) {
-//     var rect = canvas.getBoundingClientRect();
-//     return {
-//         x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-//         y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
-//     };
-// }
+// Make the correct mouse position from the canvas, regardless of padding, margin.
+function getMousePos(canvas, event) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
 
 
 // Creates a Wall on an Event and pushed it to the Walls Array.
 //cursorCorrection because of margin.
-function createWall(event) {
-  var mouseX = event.pageX-cursorCorrection;
-  var mouseY = event.pageY-cursorCorrection;
+function createWall() {
+  var mouse = getMousePos(canvas, event);
 
   if (dir === 1) {
     // horizontalWalls = []; // Clears the Array before making new walls.
     horizontalWalls.push({
-      x: mouseX,
-      y: mouseY
+      x: mouse.x,
+      y: mouse.y
     });
     //shrink the GameArea height
-    if (balls[0].y < mouseY){
-      gameArea.height = mouseY;
+    if (balls[0].y < mouse.y){
+      gameArea.height = mouse.y;
       console.log("ball is above ", gameArea);
     } else {
-      gameArea.y = mouseY;
-      // gameArea.height = gameArea.height - mouseY - wallThickness;
+      gameArea.y = mouse.y;
+      // gameArea.height = gameArea.height - mouse.y - wallThickness;
       console.log("ball is below ", gameArea);
     }
 
@@ -93,16 +92,16 @@ function createWall(event) {
   else {
     // verticalWalls = [];   // Clears the Array before making new walls.
     verticalWalls.push({
-      x: mouseX,
-      y: mouseY
+      x: mouse.x,
+      y: mouse.y
     });
     //shrink the GameArea width
-    if (balls[0].x < mouseX){
-      gameArea.width = mouseX;
+    if (balls[0].x < mouse.x){
+      gameArea.width = mouse.x;
       console.log("ball is to left ", gameArea);
     } else {
-      gameArea.x = mouseX;
-      // gameArea.width = gameArea.width - mouseX - wallThickness;
+      gameArea.x = mouse.x;
+      // gameArea.width = gameArea.width - mouse.x - wallThickness;
       console.log("ball is to right ", gameArea);
     }
 
@@ -124,6 +123,9 @@ function drawBall() {
 
 // Draw a Horizontal Wall.
 function drawHorizontalWall(wall) {
+  if (balls[0].y < wall.y){
+    wallThickness += 100;
+  }
   //draws first half of the wall
   c.beginPath();
   c.rect(wall.x, wall.y, canvas.width, wallThickness);
@@ -137,6 +139,8 @@ function drawHorizontalWall(wall) {
   c.fillStyle = "green";
   c.fill();
   c.closePath();
+
+
 }
 
 // Draw a Vertical Wall.
