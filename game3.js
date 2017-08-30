@@ -126,28 +126,58 @@ Canvas.prototype.drawWalls = function (type, wall) {
     clearInterval(intervalId);
   }
 
+  // //draws first half of the wall
+  // this.canvasContext.beginPath();
+  //
+  // if(type === 'horizontal') {
+  //   this.canvasContext.rect(wall.position.x, wall.position.y, this.w, wall.size.h);
+  // } else {
+  //   this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w,this.y);
+  // }
+  // this.canvasContext.fillStyle = "red";
+  // this.canvasContext.fill();
+  // this.canvasContext.closePath();
+
   //draws first half of the wall
   this.canvasContext.beginPath();
 
   if(type === 'horizontal') {
-    this.canvasContext.rect(wall.position.x, wall.position.y, this.w, wall.size.h);
+  this.canvasContext.moveTo(this.w, wall.position.y);
   } else {
-    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w,this.y);
+    this.canvasContext.moveTo(wall.position.x, this.h);
   }
-  this.canvasContext.fillStyle = "red";
-  this.canvasContext.fill();
+  this.canvasContext.lineTo(wall.position.x, wall.position.y);
+  this.canvasContext.strokeStyle = "red";
+  this.canvasContext.stroke();
   this.canvasContext.closePath();
+
 
   //draws second half of the wall
   this.canvasContext.beginPath();
   if(type === 'horizontal') {
-    this.canvasContext.rect(wall.position.x, wall.position.y, -this.w, wall.size.h);
+  this.canvasContext.moveTo(this.x, wall.position.y);
   } else {
-    this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, -this.y);
+    this.canvasContext.moveTo(wall.position.x, this.y);
   }
-  this.canvasContext.fillStyle = "green";
-  this.canvasContext.fill();
+  this.canvasContext.lineTo(wall.position.x, wall.position.y);
+  this.canvasContext.strokeStyle = "green";
+  this.canvasContext.stroke();
   this.canvasContext.closePath();
+
+
+
+
+  //
+  // //draws second half of the wall
+  // this.canvasContext.beginPath();
+  // if(type === 'horizontal') {
+  //   this.canvasContext.rect(wall.position.x, wall.position.y, -this.w, wall.size.h);
+  // } else {
+  //   this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w, -this.y);
+  // }
+  // this.canvasContext.fillStyle = "green";
+  // this.canvasContext.fill();
+  // this.canvasContext.closePath();
 
 
 };
