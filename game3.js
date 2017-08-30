@@ -68,9 +68,9 @@ Canvas.prototype.update = function () {
 Canvas.prototype.refreshCanvas = function () {
   this.drawBalls();
   this.updateWalls();
+
 };
 
-//ADDED NOT WORKING
 Canvas.prototype.updateWalls = function () {
   this.walls.vertical.forEach(function(wall){
     this.drawWalls('vertical', wall);
@@ -117,8 +117,7 @@ Canvas.prototype.checkBallsPosition = function() {
   }
 };
 
-
-
+//TODO i need to make all the walls to grow. Not only the first.
 Canvas.prototype.drawWalls = function (type, wall) {
   var intervalId = setInterval(grow, 20);
 
@@ -136,7 +135,6 @@ Canvas.prototype.drawWalls = function (type, wall) {
   } else {
     this.canvasContext.rect(wall.position.x, wall.position.y, wall.size.w,intervalId);
   }
-
   this.canvasContext.fillStyle = "red";
   this.canvasContext.fill();
   this.canvasContext.closePath();
@@ -151,8 +149,9 @@ Canvas.prototype.drawWalls = function (type, wall) {
   this.canvasContext.fillStyle = "green";
   this.canvasContext.fill();
   this.canvasContext.closePath();
-};
 
+
+};
 
 
 Canvas.prototype.generateWalls = function (e) {
@@ -165,14 +164,18 @@ Canvas.prototype.generateWalls = function (e) {
   if(this.wallDirection == 1) {
     console.log('horizontal wall is coming');
     this.walls.horizontal.push(new Wall(mouse));
+
   } else {
     console.log('vertical wall is coming');
     this.walls.vertical.push(new Wall(mouse));
+
   }
+
 
   console.log('this.walls', this.walls);
   this.clearedArea();
   this.changeLevel();
+
 };
 
 Canvas.prototype.toggleDirection = function (e){
@@ -192,7 +195,7 @@ Canvas.prototype.clearedArea = function () {
   console.log(currentGameArea);
 
   cleared = Math.floor(100 -(currentGameArea/startingArea*100));
-  console.log("You've cleared " + cleared + " % of the field.");
+  $('#cleared').text("CLEARED AREA: " + cleared + "%");
   return cleared;
 };
 
@@ -200,7 +203,7 @@ Canvas.prototype.changeLevel = function() {
   if (cleared > 80) {
     this.level++;
     this.balls.push(new Ball()); //this will happen in generateBalls. restart everything with new level?
-    console.log("Level up! Now it's level " + this.level);
+    $('#level').text("LEVEL: " + this.level);
     console.log(this.balls);
 
   }
@@ -262,6 +265,7 @@ function Wall (mouse) {
 
   this.isGrowing = true;
 }
+
 
 
 

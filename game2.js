@@ -41,7 +41,7 @@ function clearedArea () {
   console.log(currentGameArea);
 
   cleared = Math.floor(100 -(currentGameArea/startingArea*100));
-  console.log("You've cleared " + cleared + " % of the field.");
+  $('#cleared').text("You've cleared " + cleared + " %");
   return cleared;
 
 }
@@ -50,7 +50,7 @@ function changeLevel () {
   if (cleared > 80) {
     level++;
     balls.push({x:50,y:30,r:10,color:25,vx:1,vy:1}); //This should be newBall
-    console.log("Level up! Now it's level " + level);
+    $('#level').text("You're on level " + level);
     console.log(balls);
     //reset game area?
   }
@@ -81,9 +81,11 @@ function createWall() {
     //shrink the GameArea height
     if (balls[0].y < mouse.y){
       gameArea.height = mouse.y;
+      wallThickness = (400 - mouse.y);
       console.log("ball is above ", gameArea);
     } else {
       gameArea.y = mouse.y;
+      wallThickness = -mouse.y;
       // gameArea.height = gameArea.height - mouse.y - wallThickness;
       console.log("ball is below ", gameArea);
     }
@@ -98,9 +100,11 @@ function createWall() {
     //shrink the GameArea width
     if (balls[0].x < mouse.x){
       gameArea.width = mouse.x;
+      wallThickness = (600 - mouse.x);
       console.log("ball is to left ", gameArea);
     } else {
       gameArea.x = mouse.x;
+      wallThickness = -mouse.x;
       // gameArea.width = gameArea.width - mouse.x - wallThickness;
       console.log("ball is to right ", gameArea);
     }
@@ -110,6 +114,8 @@ function createWall() {
   changeLevel();
   return gameArea.y,gameArea.x,gameArea.height,gameArea.width ;
 }
+
+
 
 
 // Draw a Ball, this will create a Ball.
@@ -125,7 +131,7 @@ function drawBall() {
 function drawHorizontalWall(wall) {
   function grow(){
     var g = 0;
-   for (var i = 0; i<canvas.width; i++){
+   for (var i = 0; i<gameArea.width; i++){
     g++;
   }}
 
@@ -159,6 +165,7 @@ function drawVerticalWall(wall) {
   c.fillStyle = "red";
   c.fill();
   c.closePath();
+
 
   //draws second half of the wall
   c.beginPath();
