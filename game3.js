@@ -248,18 +248,19 @@ class Canvas {
     // CHECK
     // this.checkBallsPosition(mouse);
 
+    if ( (mouse.x < this.x + this.w) && (mouse.x >this.x) && (mouse.y < this.y + this.h) && (mouse.y > this.y) ) {
+      if(this.wallDirection == 1) {
 
-    if(this.wallDirection == 1) {
+        this.walls.horizontal.push(new Wall(mouse));
 
-      this.walls.horizontal.push(new Wall(mouse));
+      } else {
 
-    } else {
+        this.walls.vertical.push(new Wall(mouse));
 
-      this.walls.vertical.push(new Wall(mouse));
+      }
 
+      this.changeLevel();
     }
-
-    this.changeLevel();
   }
 
   toggleDirection  (e){
