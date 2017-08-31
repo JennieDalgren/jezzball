@@ -10,6 +10,29 @@ body {
   background-color: #335D8A;
 }
 
+#wrapper {
+  position: relative;
+
+
+}
+
+.gameover {
+  text-align: center;
+  display: inline;
+  position: absolute;
+  top: 50px;
+  width: 480;
+  height: 320;
+  background-color: #ff0000;
+  font-size: 100px;
+  z-index: 2;
+}
+
+.gameover span {
+  display: inline-block;
+  font-size: 20px;
+}
+
 canvas {
   width: 600px;
   height: 400px;
@@ -17,6 +40,7 @@ canvas {
   cursor:ns-resize;
   background-color: #eee;
   border: none;
+
 }
 
 canvas.direction {

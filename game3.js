@@ -22,8 +22,12 @@ class Canvas {
     this.intervalId = setInterval(this.refreshCanvas.bind(this), 10);
   }
   startLevel () {
+    $( ".gameover" ).remove();
+
     this.level++;
     $('#level').text("LEVEL: " + this.level);
+
+
     this.cleared = 0;
     this.x = 0;
     this.y = 0;
@@ -40,8 +44,9 @@ class Canvas {
 
   detectClickEvent  () {
     $('#canvas').on('mouseup', this.generateWalls.bind(this));
-
     $(document).on('keyup', this.toggleDirection.bind(this));
+
+
   }
 
   generateBalls  () {
@@ -93,11 +98,11 @@ class Canvas {
       wall.isGrowing = false;
       if (wall.position.y - wall.size1 > this.y){
         wall.isGrowing = true;
-        wall.size1++;
+        wall.size1+=3;
       }
       if (wall.position.y + wall.size2 < this.h){
         wall.isGrowing = true;
-        wall.size2++;
+        wall.size2+=3;
       }
 
       //Check collision between ball and horizontal wall
@@ -108,6 +113,7 @@ class Canvas {
 
       if (ballIsSimilarWidth && ballIsSimilarWidth2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
         console.log("DEAD");
+        this.gameOver();
       }
 
 
@@ -130,11 +136,11 @@ class Canvas {
       wall.isGrowing = false;
       if (wall.position.x - wall.size1 > this.x){
         wall.isGrowing = true;
-        wall.size1++;
+        wall.size1+=3;
       }
       if (wall.position.x + wall.size2 < this.w){
         wall.isGrowing = true;
-        wall.size2++;
+        wall.size2+=3;
       }
 
       //Check collision between ball and horizontal wall
@@ -145,11 +151,13 @@ class Canvas {
 
       if (ballIsSimilarHeight && ballIsSimilarHeight2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
         console.log("DEAD");
+        this.gameOver();
       }
 
 
       if (!wall.isGrowing) {
         this.checkBallsPosition(wall.position, true);
+
       }
     });
 
@@ -208,7 +216,7 @@ class Canvas {
     } else {
       this.canvasContext.lineTo(wall.position.x, wall.position.y + wall.size2);
     }
-
+    this.canvasContext.lineWidth=10;
     this.canvasContext.strokeStyle = "red";
     this.canvasContext.stroke();
 
@@ -221,7 +229,7 @@ class Canvas {
     } else {
       this.canvasContext.lineTo(wall.position.x, wall.position.y - wall.size1);
     }
-
+    this.canvasContext.lineWidth=10;
     this.canvasContext.strokeStyle = "green";
     this.canvasContext.stroke();
   }
@@ -257,6 +265,19 @@ class Canvas {
       this.canvasElement.toggleClass('direction');
       this.wallDirection = this.wallDirection * -1;
     }
+  }
+
+
+  gameOver () {
+    // $(".info").append("<div class='gameover'>GAME OVER <span>starting over... get ready</span></div>");
+    // this.walls = [];
+    // this.balls = [];
+    // this.level = 0;
+    // $('#level').text("LEVEL: " + this.level);
+    // clearInterval(this.intervalId);
+
+    // setTimeout(this.startLevel, 5000);
+
   }
 
   clearedArea  () {
