@@ -5,11 +5,13 @@
 class Canvas {
   constructor () {
     this.level = 0;
+    this.timer = 0;
     this.canvasElement = $('#canvas');
     this.canvasContext = this.canvasElement[0].getContext('2d');
     this.WIDTH  = 600;
     this.HEIGHT = 400;
     this.wallDirection = 1;
+
     /*
     vanilla JS way
     this.canvasElement = document.getElementById('canvas');
@@ -19,6 +21,7 @@ class Canvas {
     this.detectClickEvent();
 
     this.startLevel();
+    this.gameTimer = setInterval(this.gameTimer.bind(this), 100);
     this.intervalId = setInterval(this.refreshCanvas.bind(this), 10);
   }
   startLevel () {
@@ -27,7 +30,7 @@ class Canvas {
     this.level++;
     $('#level').text("LEVEL: " + this.level);
 
-
+    this.timer = 0;
     this.cleared = 0;
     this.x = 0;
     this.y = 0;
@@ -100,7 +103,7 @@ class Canvas {
         wall.isGrowing = true;
         wall.size1+=3;
       }
-      if (wall.position.y + wall.size2 < this.h){
+      if (wall.position.y + wall.size2 < this.h+this.y){
         wall.isGrowing = true;
         wall.size2+=3;
       }
@@ -138,7 +141,7 @@ class Canvas {
         wall.isGrowing = true;
         wall.size1+=3;
       }
-      if (wall.position.x + wall.size2 < this.w){
+      if (wall.position.x + wall.size2 < this.w+this.x){
         wall.isGrowing = true;
         wall.size2+=3;
       }
@@ -295,6 +298,15 @@ class Canvas {
       this.startLevel();
     }
   }
+
+
+  gameTimer () {
+    this.timer++;
+    $('#time').text(this.timer);
+  }
+
+
+
 
 
 }

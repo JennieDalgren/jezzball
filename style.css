@@ -59,3 +59,16 @@ canvas.direction {
   height: 50px;
   background-color: #FEC88F;
 }
+
+#time {
+    margin-left:5%;
+  width: 30%
+}
+#cleared {
+    margin-left:5%;
+  width: 30%
+}
+#level {
+  margin-left:5%;
+  width: 30%
+}
