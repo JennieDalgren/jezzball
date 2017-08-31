@@ -27,9 +27,10 @@ class Canvas {
   startLevel () {
     $( ".gameover" ).remove();
 
+    console.log('this.level STARTLEVEL FUNC BEFORE INCREASE', this.level);
     this.level++;
     $('#level').text("LEVEL: " + this.level);
-
+    console.log('this.level STARTLEVEL FUNC', this.level);
     this.timer = 0;
     this.cleared = 0;
     this.x = 0;
@@ -52,7 +53,7 @@ class Canvas {
 
   }
 
-  generateBalls  () {
+  generateBalls  (){
     for (var i = 0; i < this.level; i++){
       var x = Math.random() * this.WIDTH;
       var y = Math.random() * this.HEIGHT;
@@ -271,16 +272,18 @@ class Canvas {
     }
   }
 
-
+// "<video width='480' height='320' autoplay><source src='source.gif'>"
   gameOver () {
-    // $(".info").append("<div class='gameover'>GAME OVER <span>starting over... get ready</span></div>");
-    // this.walls = [];
-    // this.balls = [];
-    // this.level = 0;
+    $("body").append("<div class='gameover'></div>");
+    this.walls.horizontal = [];
+    this.walls.horizontal = [];
+    this.balls = [];
+    this.level = 0;
+    console.log('this.level', this.level);
     // $('#level').text("LEVEL: " + this.level);
     // clearInterval(this.intervalId);
 
-    // setTimeout(this.startLevel, 5000);
+    setTimeout(this.startLevel.bind(this), 5000);
 
   }
 
@@ -295,7 +298,7 @@ class Canvas {
   }
 
   changeLevel () {
-    if (this.cleared > 90) {
+    if (this.cleared >= 90) {
       this.startLevel();
     }
   }

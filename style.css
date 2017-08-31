@@ -17,21 +17,22 @@ body {
 }
 
 .gameover {
-  text-align: center;
-  display: inline;
   position: absolute;
-  top: 50px;
-  width: 480;
-  height: 320;
-  background-color: #ff0000;
-  font-size: 100px;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('source.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
   z-index: 2;
 }
 
-.gameover span {
-  display: inline-block;
-  font-size: 20px;
-}
+/*video {
+  position: absolute;
+  top: 50px;
+  z-index: 2;
+}*/
+
 
 canvas {
   width: 600px;
