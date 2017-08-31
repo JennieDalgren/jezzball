@@ -9,7 +9,7 @@ class Canvas {
     this.canvasContext = this.canvasElement[0].getContext('2d');
     this.WIDTH  = 600;
     this.HEIGHT = 400;
-
+    this.wallDirection = 1;
     /*
     vanilla JS way
     this.canvasElement = document.getElementById('canvas');
@@ -18,7 +18,7 @@ class Canvas {
 
     this.detectClickEvent();
 
-    this.startLevel()
+    this.startLevel();
     this.intervalId = setInterval(this.refreshCanvas.bind(this), 10);
   }
   startLevel () {
@@ -29,7 +29,6 @@ class Canvas {
     this.y = 0;
     this.w = 600;
     this.h = 400;
-    this.wallDirection = 1;
     this.balls = [];
     this.walls = {
       horizontal: [],
@@ -43,21 +42,20 @@ class Canvas {
     $('#canvas').on('mouseup', this.generateWalls.bind(this));
 
     $(document).on('keyup', this.toggleDirection.bind(this));
-  };
+  }
 
   generateBalls  () {
     for (var i = 0; i < this.level; i++){
-      var x = Math.random() * this.WIDTH
-      var y = Math.random() * this.HEIGHT
+      var x = Math.random() * this.WIDTH;
+      var y = Math.random() * this.HEIGHT;
 
       this.balls.push(new Ball(x, y));
     }
-
-  };
+  }
 
   clearCanvas  () {
     this.canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
-  };
+  }
 
 
   drawBalls  () {
@@ -68,7 +66,7 @@ class Canvas {
       this.canvasContext.fill();
       this.canvasContext.closePath();
     }
-  };
+  }
 
 
   refreshCanvas  () {
@@ -81,63 +79,93 @@ class Canvas {
     // this.canvasContext.fill();
     this.updateWalls();
     this.drawBalls();
+    this.changeLevel();
 
     this.balls.forEach(function(ball){
       ball.bounce();
     });
-  };
+  }
 
   updateWalls  () {
+
+    //VERTICAL WALLS UPPDATE
     this.walls.vertical.forEach((wall) => {
-      wall.isGrowing = false
+      wall.isGrowing = false;
       if (wall.position.y - wall.size1 > this.y){
-        wall.isGrowing = true
-        wall.size1++
+        wall.isGrowing = true;
+        wall.size1++;
       }
       if (wall.position.y + wall.size2 < this.h){
-        wall.isGrowing = true
-        wall.size2++
+        wall.isGrowing = true;
+        wall.size2++;
       }
 
-      if (!wall.isGrowing) {
-        this.checkBallsPosition(wall.position)
+      //Check collision between ball and horizontal wall
+      var ballIsSimilarWidth     = (Math.round(this.balls[0].position.x) - wall.position.x < 2),
+          ballIsSimilarWidth2    = (Math.round(this.balls[0].position.x) - wall.position.x > -2),
+          ballTouchRedBoundery    = (this.balls[0].position.y > (wall.position.y - wall.size2)),
+          ballTouchGreenBoundery  = (this.balls[0].position.y < (wall.position.y + wall.size2));
+
+      if (ballIsSimilarWidth && ballIsSimilarWidth2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
+        console.log("DEAD");
       }
-    })
+
+
+      if (!wall.isGrowing) {
+        this.checkBallsPosition(wall.position);
+      }
+    });
 
     this.walls.vertical = this.walls.vertical.filter(wall =>
       wall.isGrowing === true
-    )
+    );
 
     this.walls.vertical.forEach(wall => {
       this.drawWalls('vertical', wall);
-    })
+    });
 
 
+    //HORIZONTAL WALLS UPDATE
     this.walls.horizontal.forEach((wall) => {
-      wall.isGrowing = false
+      wall.isGrowing = false;
       if (wall.position.x - wall.size1 > this.x){
-        wall.isGrowing = true
-        wall.size1++
+        wall.isGrowing = true;
+        wall.size1++;
       }
       if (wall.position.x + wall.size2 < this.w){
-        wall.isGrowing = true
-        wall.size2++
+        wall.isGrowing = true;
+        wall.size2++;
       }
 
+      //Check collision between ball and horizontal wall
+      var ballIsSimilarHeight     = (Math.round(this.balls[0].position.y) - wall.position.y < 2),
+          ballIsSimilarHeight2    = (Math.round(this.balls[0].position.y) - wall.position.y > -2),
+          ballTouchRedBoundery    = (this.balls[0].position.x > (wall.position.x - wall.size1)),
+          ballTouchGreenBoundery  = (this.balls[0].position.x < (wall.position.x + wall.size1));
+
+      if (ballIsSimilarHeight && ballIsSimilarHeight2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
+        console.log("DEAD");
+      }
+
+
       if (!wall.isGrowing) {
-        this.checkBallsPosition(wall.position, true)
+        this.checkBallsPosition(wall.position, true);
       }
     });
 
     this.walls.horizontal = this.walls.horizontal.filter(wall =>
       wall.isGrowing === true
-    )
+    );
+
 
     this.walls.horizontal.forEach(wall => {
       this.drawWalls('horizontal', wall);
-    })
+    });
 
-  };
+
+
+
+  }
 
   checkBallsPosition (wall, isHorizontal) {
 
@@ -169,11 +197,10 @@ class Canvas {
     }
 
     this.clearedArea();
-  };
+  }
 
-  //TODO i need to make all the walls to grow. Not only the first.
   drawWalls  (type, wall) {
-    //draws first half of the wall
+    //draws first half of the wall (right and down)
     this.canvasContext.beginPath();
     this.canvasContext.moveTo(wall.position.x, wall.position.y);
     if(type === 'horizontal') {
@@ -197,7 +224,7 @@ class Canvas {
 
     this.canvasContext.strokeStyle = "green";
     this.canvasContext.stroke();
-  };
+  }
 
   generateWalls  (e) {
     var restMousePosition  = document.getElementById("canvas").getBoundingClientRect();
@@ -222,7 +249,7 @@ class Canvas {
     }
 
     this.changeLevel();
-  };
+  }
 
   toggleDirection  (e){
     if(e.keyCode==32){
@@ -230,8 +257,7 @@ class Canvas {
       this.canvasElement.toggleClass('direction');
       this.wallDirection = this.wallDirection * -1;
     }
-
-  };
+  }
 
   clearedArea  () {
 
@@ -241,17 +267,15 @@ class Canvas {
     this.cleared = Math.floor(100 -(currentGameArea/startingArea*100));
     $('#cleared').text("CLEARED AREA: " + this.cleared + "%");
 
-  };
+  }
 
   changeLevel () {
-    if (this.cleared > 80) {
-      this.startLevel()
+    if (this.cleared > 90) {
+      this.startLevel();
     }
-  };
+  }
 
-  levelUpReset  () {
 
-  };
 }
 
 // BALL  CONSTRUCTOR //
@@ -310,6 +334,13 @@ function Wall (mouse) {
 
   this.isGrowing = true;
 }
+
+
+
+
+
+
+
 
 
 
