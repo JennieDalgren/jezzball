@@ -1,6 +1,16 @@
+/************* COLORS and font TO USE
+28263D dark
+5246BD purple
+E47A68 orange
+FAC3BE beige
+F6F7E1 white yellow
+CAA6EA light purple
+font-family: 'Quicksand';
+***************************/
+
 *
 *:after,
-*:before{
+*:before {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,23 +22,7 @@ body {
   background-color: #28263D;
 }
 
-
-
-/*28263D dark
-5246BD purple
-E47A68 orange
-FAC3BE beige
-F6F7E1 white yellow
-CAA6EA light purple
-
-font-family: 'Poiret One', cursive;
-font-family: 'Julius Sans One', sans-serif;
-font-family: 'Varela', sans-serif;
-font-family: 'Josefin Sans', sans-serif;
-font-family: 'Quicksand', sans-serif;
-font-family: 'Josefin Slab', serif;
-*/
-
+/*THE WELCOME SCREEN*/
 .welcome {
   display: flex;
   justify-content: center;
@@ -47,28 +41,33 @@ font-family: 'Josefin Slab', serif;
 .welcome h1 {
   font-size: 100px;
 }
+.welcome .blinking {
+  animation: blink 1s infinite;
+  letter-spacing: 6px;
 
-/*.circle {
-  background: #FDFFAE;
-  border-radius: 50%;
-  height: 30px;
-  width: 30px;
-  margin: 10px;
-  float: left;
-  animation: bounce 1s infinite;
-  animation-direction: alternate;
 }
 
-@keyframes bounce {
+.welcome span {
+  color: #FAC3BE;
+  text-shadow: none;
+}
+
+@keyframes blink {
   0% {
-	  transform:translateY(0px);
+	  color: #FAC3BE;
+    text-shadow: 1px 1px #E47A68;
+  }
+  50% {
+  	color: #E47A68;
+    text-shadow: 1px 1px #FAC3BE;
   }
   100% {
-  	transform:translateY(600px);
-    }
-}*/
+    color: #FAC3BE;
+    text-shadow: 1px 1px #E47A68;
+  }
+}
 
-
+/* THE CANVAS*/
 #wrapper {
 
   display: flex;
@@ -86,15 +85,13 @@ canvas {
   cursor:ns-resize;
   background-color: #28263D;
   border: none;
-
 }
 
 canvas.direction {
  cursor:ew-resize;
 }
 
-
-
+/* The timer score level */
 .info {
   font-family: 'Quicksand';
   font-size: 40px;
@@ -122,13 +119,12 @@ canvas.direction {
   width: 30%
 }
 
-/*need this to center the game over gif*/
+/*The game over screen*/
 .center-gameover {
   position: absolute;
   left: 50%;
   top:0;
   z-index: 98;
-
 }
 
 .gameover {
