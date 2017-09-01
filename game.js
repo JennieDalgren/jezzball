@@ -4,6 +4,8 @@
 // ================== //
 class Canvas {
   constructor () {
+    this.lastY = 0;
+    this.lastX = 0;  
     this.level = 0;
     this.timer = 0;
     this.mySound = new Sound("levelup.mp3");
@@ -202,12 +204,13 @@ class Canvas {
       for (var i = 0; i < this.balls.length; i++){
         if(this.balls[i].position.y < wall.y) {
           this.h = wall.y - this.y;
-          // console.log("ball is above" , this.x ,this.y, this.w , this.h);
+
         }
         else {
           this.y = wall.y;
-          this.h -= wall.y;
-          // console.log("ball is below" , this.x ,this.y, this.w , this.h);
+          this.h = this.h - wall.y + this.lastY;
+          this.lastY = this.y;
+
         }
       }
 
@@ -220,7 +223,9 @@ class Canvas {
         }
         else {
           this.x = wall.x;
-          this.w -= wall.x;
+          this.w = this.w - wall.x + this.lastX;
+          this.lastX = this.x;
+
         }
       }
     }
