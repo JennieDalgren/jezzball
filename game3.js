@@ -17,6 +17,7 @@ class Canvas {
     this.canvasElement = document.getElementById('canvas');
     this.canvasContext = this.canvasElement.getContext('2d');
     */
+    $("body").append("<div class='welcome'><div class='circle'></div><h1>MEZZBALL</h1><h2> - HIT 'S' TO START - </h2></div>");
 
     this.detectClickEvent();
 
@@ -27,10 +28,8 @@ class Canvas {
   startLevel () {
     $( ".gameover" ).remove();
 
-    console.log('this.level STARTLEVEL FUNC BEFORE INCREASE', this.level);
     this.level++;
-    $('#level').text("LEVEL: " + this.level);
-    console.log('this.level STARTLEVEL FUNC', this.level);
+    $('#level').text(this.level);
     this.timer = 0;
     this.cleared = 0;
     this.x = 0;
@@ -49,16 +48,23 @@ class Canvas {
   detectClickEvent  () {
     $('#canvas').on('mouseup', this.generateWalls.bind(this));
     $(document).on('keyup', this.toggleDirection.bind(this));
+    $(document).on('keyup',  this.startGame.bind(this) );
+  }
 
-
+  startGame (e) {
+    if(e.keyCode==83){
+      $( ".welcome" ).remove();
+      this.timer = -1;
+    }
   }
 
   generateBalls  (){
     for (var i = 0; i < this.level; i++){
-      var x = Math.random() * this.WIDTH;
-      var y = Math.random() * this.HEIGHT;
+      var x = ((Math.random() * 0.9) + 0.05) * this.WIDTH;
+      var y = ((Math.random() * 0.9) + 0.05) * this.HEIGHT;
+      if(this.level <= 3) { this.balls.push(new Ball(x, y, this.level)); }
+      else { this.balls.push(new Ball(x, y, 3));}
 
-      this.balls.push(new Ball(x, y));
     }
   }
 
@@ -66,8 +72,8 @@ class Canvas {
     this.canvasContext.clearRect(0, 0, this.WIDTH, this.HEIGHT);
   }
 
-
   drawBalls  () {
+
     for (var i = 0; i < this.balls.length; i++){
       this.canvasContext.beginPath();
       this.canvasContext.arc(this.balls[i].position.x,this.balls[i].position.y, this.balls[i].radius, 0, Math.PI*2);
@@ -77,14 +83,23 @@ class Canvas {
     }
   }
 
+  //TODO try to figure out how to split gameAreas
+  // drawGameArea () {
+  //   this.canvasContext.beginPath();
+  //   this.canvasContext.fillStyle = '#fff';
+  //   this.canvasContext.fillRect(this.x, this.y, this.w, this.h);
+  //   this.canvasContext.closePath();
+  // }
 
   refreshCanvas  () {
 
     this.clearCanvas();
+    // this.drawGameArea();
     this.canvasContext.beginPath();
-    this.canvasContext.fillStyle = '#fff';
+    this.canvasContext.fillStyle = '#F6F7E1';
     this.canvasContext.fillRect(this.x, this.y, this.w, this.h);
     this.canvasContext.closePath();
+
     // this.canvasContext.fill();
     this.updateWalls();
     this.drawBalls();
@@ -109,17 +124,18 @@ class Canvas {
         wall.size2+=3;
       }
 
-      //Check collision between ball and horizontal wall
-      var ballIsSimilarWidth     = (Math.round(this.balls[0].position.x) - wall.position.x < 2),
-          ballIsSimilarWidth2    = (Math.round(this.balls[0].position.x) - wall.position.x > -2),
-          ballTouchRedBoundery    = (this.balls[0].position.y > (wall.position.y - wall.size2)),
-          ballTouchGreenBoundery  = (this.balls[0].position.y < (wall.position.y + wall.size2));
+      for (var i = 0; i < this.balls.length; i++){
+        //Check collision between ball and horizontal wall
+        var ballIsSimilarWidth     = (Math.round(this.balls[i].position.x) - wall.position.x < 2),
+            ballIsSimilarWidth2    = (Math.round(this.balls[i].position.x) - wall.position.x > -2),
+            ballTouchRedBoundery    = (this.balls[i].position.y > (wall.position.y - wall.size2)),
+            ballTouchGreenBoundery  = (this.balls[i].position.y < (wall.position.y + wall.size2));
 
-      if (ballIsSimilarWidth && ballIsSimilarWidth2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
-        console.log("DEAD");
-        this.gameOver();
+        if (ballIsSimilarWidth && ballIsSimilarWidth2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
+          console.log("DEAD");
+          this.gameOver();
+        }
       }
-
 
       if (!wall.isGrowing) {
         this.checkBallsPosition(wall.position);
@@ -147,17 +163,18 @@ class Canvas {
         wall.size2+=3;
       }
 
-      //Check collision between ball and horizontal wall
-      var ballIsSimilarHeight     = (Math.round(this.balls[0].position.y) - wall.position.y < 2),
-          ballIsSimilarHeight2    = (Math.round(this.balls[0].position.y) - wall.position.y > -2),
-          ballTouchRedBoundery    = (this.balls[0].position.x > (wall.position.x - wall.size1)),
-          ballTouchGreenBoundery  = (this.balls[0].position.x < (wall.position.x + wall.size1));
+      for (var i = 0; i < this.balls.length; i++){
+        //Check collision between ball and horizontal wall
+        var ballIsSimilarHeight     = (Math.round(this.balls[i].position.y) - wall.position.y < 2),
+            ballIsSimilarHeight2    = (Math.round(this.balls[i].position.y) - wall.position.y > -2),
+            ballTouchRedBoundery    = (this.balls[i].position.x > (wall.position.x - wall.size1)),
+            ballTouchGreenBoundery  = (this.balls[i].position.x < (wall.position.x + wall.size1));
 
-      if (ballIsSimilarHeight && ballIsSimilarHeight2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
-        console.log("DEAD");
-        this.gameOver();
+        if (ballIsSimilarHeight && ballIsSimilarHeight2 && ballTouchRedBoundery && ballTouchGreenBoundery ) {
+          console.log("DEAD");
+          this.gameOver();
+        }
       }
-
 
       if (!wall.isGrowing) {
         this.checkBallsPosition(wall.position, true);
@@ -184,28 +201,28 @@ class Canvas {
     // Horizontal
     if(isHorizontal) {
 
-      // for (var i = 0; i < this.balls.length; i++){
-        if(this.balls[0].position.y < wall.y) {
+      for (var i = 0; i < this.balls.length; i++){
+        if(this.balls[i].position.y < wall.y) {
           this.h = wall.y - this.y;
         }
         else {
           this.y = wall.y;
           this.h -= wall.y;
         }
-      // }
+      }
 
     // Vertical
     } else {
 
-      // for (var j = 0; j < this.balls.length; j++){
-        if(this.balls[0].position.x < wall.x) {
+      for (var j = 0; j < this.balls.length; j++){
+        if(this.balls[j].position.x < wall.x) {
           this.w = wall.x - this.x;
         }
         else {
           this.x = wall.x;
           this.w -= wall.x;
         }
-      // }
+      }
     }
 
     this.clearedArea();
@@ -221,7 +238,7 @@ class Canvas {
       this.canvasContext.lineTo(wall.position.x, wall.position.y + wall.size2);
     }
     this.canvasContext.lineWidth=10;
-    this.canvasContext.strokeStyle = "red";
+    this.canvasContext.strokeStyle = "rgba(40, 38, 61, 0.6)";
     this.canvasContext.stroke();
 
 
@@ -234,7 +251,7 @@ class Canvas {
       this.canvasContext.lineTo(wall.position.x, wall.position.y - wall.size1);
     }
     this.canvasContext.lineWidth=10;
-    this.canvasContext.strokeStyle = "green";
+    this.canvasContext.strokeStyle = "rgba(40, 38, 61, 0.6)";
     this.canvasContext.stroke();
   }
 
@@ -272,19 +289,13 @@ class Canvas {
     }
   }
 
-// "<video width='480' height='320' autoplay><source src='source.gif'>"
   gameOver () {
-    $("body").append("<div class='gameover'></div>");
+    $("#wrapper").append("<div class='gameover'></div>");
     this.walls.horizontal = [];
     this.walls.horizontal = [];
     this.balls = [];
     this.level = 0;
-    console.log('this.level', this.level);
-    // $('#level').text("LEVEL: " + this.level);
-    // clearInterval(this.intervalId);
-
     setTimeout(this.startLevel.bind(this), 5000);
-
   }
 
   clearedArea  () {
@@ -293,12 +304,12 @@ class Canvas {
     var currentGameArea = this.w * this.h;
 
     this.cleared = Math.floor(100 -(currentGameArea/startingArea*100));
-    $('#cleared').text("CLEARED AREA: " + this.cleared + "%");
+    $('#cleared').text(this.cleared + "%");
 
   }
 
   changeLevel () {
-    if (this.cleared >= 90) {
+    if (this.cleared >= 85) {
       this.startLevel();
     }
   }
@@ -317,15 +328,15 @@ class Canvas {
 
 // BALL  CONSTRUCTOR //
 // ================== //
-function Ball (x, y) {
+function Ball (x, y, speed) {
   this.position = {
     x,
     y
   };
   this.radius = 10;
   this.speed = {
-    x: 3,
-    y: 3
+    x: speed,
+    y: speed
   };
 
   //this.update();
@@ -362,24 +373,12 @@ function Wall (mouse) {
     x: mouse.x,
     y: mouse.y
   };
-  // this.size = {
-  //   w: 10,
-  //   h: 10
-  // };
+
   this.size1 = 0;
   this.size2 = 0;
 
   this.isGrowing = true;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -389,6 +388,5 @@ var canvas;
 
 $( document ).ready(function() {
     canvas = new Canvas();
-
 
 });
