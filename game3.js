@@ -290,9 +290,9 @@ class Canvas {
   }
 
   gameOver () {
-    $("#wrapper").append("<div class='gameover'></div>");
+    $("#wrapper").append("<div class='center-gameover'><div class='gameover'></div></div>");
     this.walls.horizontal = [];
-    this.walls.horizontal = [];
+    this.walls.vertical = [];
     this.balls = [];
     this.level = 0;
     setTimeout(this.startLevel.bind(this), 5000);

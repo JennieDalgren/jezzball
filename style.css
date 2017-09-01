@@ -19,12 +19,8 @@ body {
 E47A68 orange
 FAC3BE beige
 F6F7E1 white yellow
-CAA6EA light purple*/
+CAA6EA light purple
 
-/*#AC8FFF - purple
-#DDAAFF - light purple
-#FF6580 - dark pink
-#FFABC1 - light pink
 font-family: 'Poiret One', cursive;
 font-family: 'Julius Sans One', sans-serif;
 font-family: 'Varela', sans-serif;
@@ -74,32 +70,47 @@ font-family: 'Josefin Slab', serif;
 
 
 #wrapper {
-  position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.gameover {
-  margin: 0;
+.center-gameover {
   position: absolute;
-  top: 0;
+  left: 50%;
+  top:50%
+}
+
+.gameover {
+  position: relative;
+  left: -50%;
+  top: -50%;
   width: 100vw;
   height: 100vh;
   background-image: url('source.gif');
   background-repeat: no-repeat;
   background-size: contain;
   z-index: 2;
+}
 
+/*.gameover {
+  position: absolute;
+  top: 0;
+  left:17%;
+
+  width: 100vw;
+  height: 100vh;
+  background-image: url('source.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 2;
+*/
 
 }
 
-/*video {
-  position: absolute;
-  top: 50px;
-  z-index: 2;
-}*/
+
 
 
 canvas {
