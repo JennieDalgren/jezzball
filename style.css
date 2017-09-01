@@ -77,42 +77,6 @@ font-family: 'Josefin Slab', serif;
   flex-direction: column;
 }
 
-.center-gameover {
-  position: absolute;
-  left: 50%;
-  top:50%
-}
-
-.gameover {
-  position: relative;
-  left: -50%;
-  top: -50%;
-  width: 100vw;
-  height: 100vh;
-  background-image: url('source.gif');
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index: 2;
-}
-
-/*.gameover {
-  position: absolute;
-  top: 0;
-  left:17%;
-
-  width: 100vw;
-  height: 100vh;
-  background-image: url('source.gif');
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index: 2;
-*/
-
-}
-
-
-
-
 canvas {
   display: block;
   margin-top: 90px;
@@ -147,7 +111,6 @@ canvas.direction {
 
 #time {
   text-align: center;
-
   width: 30%
 }
 #cleared {
@@ -156,6 +119,26 @@ canvas.direction {
 }
 #level {
   text-align: center;
-
   width: 30%
+}
+
+/*need this to center the game over gif*/
+.center-gameover {
+  position: absolute;
+  left: 50%;
+  top:0;
+  z-index: 98;
+
+}
+
+.gameover {
+  position: relative;
+  left: -50%;
+  top: -50%;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('source.gif');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
 }

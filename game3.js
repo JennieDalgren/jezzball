@@ -6,6 +6,7 @@ class Canvas {
   constructor () {
     this.level = 0;
     this.timer = 0;
+    this.mySound = new Sound("levelup.mp3");
     this.canvasElement = $('#canvas');
     this.canvasContext = this.canvasElement[0].getContext('2d');
     this.WIDTH  = 600;
@@ -30,6 +31,7 @@ class Canvas {
 
     this.level++;
     $('#level').text(this.level);
+
     this.timer = 0;
     this.cleared = 0;
     this.x = 0;
@@ -290,7 +292,7 @@ class Canvas {
   }
 
   gameOver () {
-    $("#wrapper").append("<div class='center-gameover'><div class='gameover'></div></div>");
+    $("body").append("<div class='center-gameover'><div class='gameover'></div></div>");
     this.walls.horizontal = [];
     this.walls.vertical = [];
     this.balls = [];
@@ -310,6 +312,7 @@ class Canvas {
 
   changeLevel () {
     if (this.cleared >= 85) {
+      this.mySound.play();
       this.startLevel();
     }
   }
@@ -322,9 +325,23 @@ class Canvas {
 
 
 
-
-
 }
+
+function Sound(src)  {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function(){
+      this.sound.play();
+  };
+  this.stop = function(){
+      this.sound.pause();
+  };
+}
+
 
 // BALL  CONSTRUCTOR //
 // ================== //
