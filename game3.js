@@ -18,7 +18,7 @@ class Canvas {
     this.canvasElement = document.getElementById('canvas');
     this.canvasContext = this.canvasElement.getContext('2d');
     */
-    $("body").append("<div class='welcome'><div class='circle'></div><h1>MEZZBALL</h1><h2>Create walls with mouse. Toggle direction with space</h2><h2 class='blinking'> - HIT <span>S</span> TO START - </h2></div>");
+    $("body").append("<div class='welcome'><div class='circle'></div><h1>MEZZBALL</h1><h2>Create walls with <span class='ul'>mouse</span>. Toggle direction with <span class='ul'>space</span></h2> <h2 class='start'> - HIT <span class='blink'>S</span> TO START - </h2></div>");
 
     this.detectClickEvent();
 

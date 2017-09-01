@@ -41,16 +41,23 @@ body {
 .welcome h1 {
   font-size: 100px;
 }
-.welcome .blinking {
-  animation: blink 1s infinite;
-  letter-spacing: 6px;
-
-}
-
-.welcome span {
+.welcome .start {
   color: #FAC3BE;
   text-shadow: none;
+  letter-spacing: 6px;
 }
+
+.welcome .ul{
+  text-decoration: underline;
+}
+
+.welcome .blink {
+  font-size: 28px;
+  animation: blink 1s infinite;
+}
+
+
+
 
 @keyframes blink {
   0% {
